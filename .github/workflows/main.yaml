@@ -1,0 +1,128 @@
+name: Unity Actions
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+env:
+  UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+
+jobs:
+  test:
+    name: Test game
+    runs-on: ubuntu-latest
+    steps:
+
+      # Checkout
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          lfs: true
+
+      # Cache
+      - name: Cache dependencies
+        uses: actions/cache@v1.1.0
+        with:
+          path: Library
+          key: Library
+
+      # Test
+      - name: Run tests
+        uses: webbertakken/unity-test-runner@v1.6
+        with:
+          unityVersion: 2019.4.9f1
+
+      # Results
+      - name: Upload results
+        uses: actions/upload-artifact@v1
+        with:
+          name: Test results
+          path: artifacts
+
+      # Notification
+      - name: Send success to Discord
+        uses: Ilshidur/action-discord@master
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+          DISCORD_USERNAME: GitHub CI/CD
+        with:
+          args: |
+            Tests from **{{ EVENT_PAYLOAD.repository.full_name }}** passed :smile:
+            [View on GitHub]({{ GITHUB_SERVER_URL }}/{{ GITHUB_REPOSITORY }}/commit/{{ GITHUB_SHA }}/checks?check_suite_id={{ GITHUB_RUN_ID }})
+      - name: Send failure to Discord
+        uses: Ilshidur/action-discord@master
+        if: failure()
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+          DISCORD_USERNAME: GitHub CI/CD
+        with:
+          args: |
+            Tests from **{{ EVENT_PAYLOAD.repository.full_name }}** failed! :poop:
+            [View on GitHub]({{ GITHUB_SERVER_URL }}/{{ GITHUB_REPOSITORY }}/commit/{{ GITHUB_SHA }}/checks?check_suite_id={{ GITHUB_RUN_ID }})
+  build:
+    name: Build game
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+
+      # Checkout
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          lfs: true
+
+      # Cache
+      - name: Cache dependencies
+        uses: actions/cache@v1.1.0
+        with:
+          path: Library
+          key: Library
+      
+      # Build
+      - name: Build demo
+        uses: webbertakken/unity-builder@v1.2
+        with:
+          unityVersion: 2019.4.9f1
+          targetPlatform: WebGL
+
+      # Upload
+      - name: Publish demo
+        uses: wlixcc/SFTP-Deploy-Action@v1.0
+        with:
+          username: 'savgs'
+          server: 'savgs.xoanweb.com'
+          ssh_private_key: ${{ secrets.SSH_PRIVATEKEY }} 
+          local_path: './build/WebGL/WebGL/*'
+          remote_path: '/var/www/savgs/wild-furious/demo'
+          args: '-o ConnectTimeout=30'
+#        uses: appleboy/scp-action@master
+#        with:
+#          host: savgs.xoanweb.com
+#          port: 22
+#          username: savgs
+#          key: ${{ secrets.SSH_PRIVATEKEY }}
+#          source: "build"
+#          target: "/var/www/savgs/wild-furious/demo"
+
+      # Notification
+      - name: Send success to Discord
+        uses: Ilshidur/action-discord@master
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+          DISCORD_USERNAME: GitHub CI/CD
+        with:
+          args: |
+            Project **{{ EVENT_PAYLOAD.repository.full_name }}** built successfully. Demo available at https://savgs.xoanweb.com/wild-furious/demo.
+            [View on GitHub]({{ GITHUB_SERVER_URL }}/{{ GITHUB_REPOSITORY }}/commit/{{ GITHUB_SHA }}/checks?check_suite_id={{ GITHUB_RUN_ID }})
+      - name: Send failure to Discord
+        uses: Ilshidur/action-discord@master
+        if: failure()
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+          DISCORD_USERNAME: GitHub CI/CD
+        with:
+          args: |
+            Failed to build **{{ EVENT_PAYLOAD.repository.full_name }}**!
+            [View on GitHub]({{ GITHUB_SERVER_URL }}/{{ GITHUB_REPOSITORY }}/commit/{{ GITHUB_SHA }}/checks?check_suite_id={{ GITHUB_RUN_ID }})
