@@ -4,19 +4,7 @@ using UnityEngine;
 
 public class PauseMenu : MonoBehaviour
 {
-    [SerializeField] private GameObject pauseMenuPanel = null;
-
-    // PAUSE AND RESUME FUNCTIONS
-
-    public static void Pause()
-    {
-        Time.timeScale = 0;
-    }
-
-    public static void Resume()
-    {
-        Time.timeScale = 1;
-    }
+    [SerializeField] public GameObject pauseMenuPanel = null;
 
     // HIDE PAUSE MENU ON START
 
@@ -33,18 +21,22 @@ public class PauseMenu : MonoBehaviour
         {
             if (!pauseMenuPanel.activeInHierarchy)
             {
-                pauseMenuPanel.SetActive(true);
-                Pause();
+                ShowAndPause();
             }
             else
             {
-                pauseMenuPanel.SetActive(false);
-                Resume();
+                HideAndResume();
             }
         }
     }
 
     // PAUSE MENU BUTTONS' LISTENERS
+
+    public void ShowAndPause()
+    {
+        pauseMenuPanel.SetActive(true);
+        Pause();
+    }
 
     public void HideAndResume()
     {
@@ -64,5 +56,17 @@ public class PauseMenu : MonoBehaviour
         #else
             Application.Quit();
         #endif
+    }
+
+    // PAUSE AND RESUME FUNCTIONS
+
+    void Pause()
+    {
+        Time.timeScale = 0;
+    }
+
+    void Resume()
+    {
+        Time.timeScale = 1;
     }
 }
