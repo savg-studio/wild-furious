@@ -8,7 +8,7 @@ namespace ObstacleTests
 {
     public class VerticalObstacleTests
     {
-        private const string VERTICAL_OBSTACLE_PREFAB_URI = "Prefabs/obstacle_example_2";
+        private const string VERTICAL_OBSTACLE_PREFAB_URI = "Prefabs/verticle_obstacle_example";
         private const int VERTICAL_OBSTACLE_MAX_Y = 16;
         private const int VERTICAL_OBSTACLE_MIN_Y = 0;
 
@@ -24,6 +24,12 @@ namespace ObstacleTests
             obstacleCtrl.maxY = VERTICAL_OBSTACLE_MAX_Y;
             obstacleCtrl.minY = VERTICAL_OBSTACLE_MIN_Y;
             // TODO: Those verisables should be private (use reflection on tests??)
+        }
+
+        [TearDown]
+        public void Teardown()
+        {
+            Object.Destroy(obstacle);
         }
 
         [UnityTest]
