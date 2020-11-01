@@ -4,9 +4,9 @@ using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
 
-namespace RacingTests
+namespace SpawnTests
 {
-    public class SpawnTests : MonoBehaviour
+    public class SpawnerTests
     {
         private const string TEMPLATE_1_NAME = "TEMPLATE_1";
         private const string TEMPLATE_2_NAME = "TEMPLATE_2";
@@ -48,7 +48,7 @@ namespace RacingTests
 
             int existing1 = 0;
             int existing2 = 0;
-            foreach (GameObject obj in FindObjectsOfType(typeof(GameObject)))
+            foreach (GameObject obj in GameObject.FindObjectsOfType(typeof(GameObject)))
             {
                 if (obj.name.Contains(TEMPLATE_1_NAME)) existing1++;
                 if (obj.name.Contains(TEMPLATE_2_NAME)) existing2++;

@@ -36,14 +36,14 @@ namespace UITests
         public void TimeIsFrozen()
         {
             pauseMenuCtrl.ShowAndPause();
-            Assert.AreEqual(Time.timeScale, 0);
+            Assert.AreEqual(0, Time.timeScale);
         }
 
         [Test]
         public void TimeIsRestored()
         {
             pauseMenuCtrl.HideAndResume();
-            Assert.AreEqual(Time.timeScale, 1);
+            Assert.AreEqual(1, Time.timeScale);
         }
     }
 }
