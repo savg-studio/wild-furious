@@ -5,7 +5,7 @@ using UnityEngine;
 public class CameraTracking: MonoBehaviour
 {
 
-    public Vector3 cameraOffset = new Vector3(0.0f, 1.3f, -3.0f);
+    public Vector3 cameraOffset = new Vector3(0.0f, 0f, -20f);
     private Transform target;
     
 
