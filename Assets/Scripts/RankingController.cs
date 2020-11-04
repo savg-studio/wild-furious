@@ -13,15 +13,21 @@ public class RankingController : MonoBehaviour
     [SerializeField] private GameObject rankingPanel = null;
     [SerializeField] private Text placeLabel = null;
     [SerializeField] private Text scoreLabel = null;
+    [SerializeField] private GameObject[] tableRows = null;
 
     // HIDE RANKING PANEL ON START
 
     void Start()
     {
-        rankingPanel.SetActive(false);
+        if (rankingPanel == null || placeLabel == null || scoreLabel == null || tableRows == null)
+        {
+            Debug.LogError("RankingController error: rankingPanel, placeLabel, scoreLabel and tableRows cannot be null");
+        }
+
+        //rankingPanel.SetActive(false);
         StartCoroutine(GetRanking("TEST-1"));
 
-        var r1 = new Ranking();
+        /*var r1 = new Ranking();
         r1.id = "yewRtu4ifsM83QbVlPEy";
         r1.circuit = "TEST-1";
         StartCoroutine(GetGlobalPosition(r1));
@@ -31,7 +37,7 @@ public class RankingController : MonoBehaviour
         r2.time = 14.5f;
         r2.character = "Mario";
         r2.circuit = "TEST-1";
-        StartCoroutine(SaveRaking(r2));
+        StartCoroutine(SaveRaking(r2));*/
     }
 
     // SHOW RANKING PANEL WITH RESULTS
@@ -63,6 +69,34 @@ public class RankingController : MonoBehaviour
 
         // Walkaround for unity deserializer not being able of convert a JSON array into a list
         RankingArray top10 = (RankingArray) JsonUtility.FromJson("{\"content\":" + www.downloadHandler.text + "}", typeof(RankingArray));
+        
+        // Show ranking in table
+        for (int i = 0; i < tableRows.Length; i++)
+        {
+            if (i < top10.content.Length)
+            {
+                SetTextInChild(tableRows[i], "position", (i + 1).ToString());
+                SetTextInChild(tableRows[i], "name", top10.content[i].name);
+                SetTextInChild(tableRows[i], "time", top10.content[i].time + "s");
+            }
+            else
+            {
+                tableRows[i].SetActive(false);
+            }
+        }
+    }
+
+    private void SetTextInChild(GameObject parent, string name, string value)
+    {
+        Transform child = parent.transform.Find(name);
+        if (child != null)
+        {
+            Text label = child.GetComponent<Text>();
+            if (label != null)
+            {
+                label.text = value;
+            }
+        }
     }
 
     // SAVE PLAYER RANKING IN SERVER
