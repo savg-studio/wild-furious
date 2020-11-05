@@ -18,7 +18,8 @@ public class PlayerController : MonoBehaviour
     public float _startDashTime=0.1f;
 
     public float dashSpeed = 20;
-    private bool dashing = false;
+    private bool dashingUp = false;
+    private bool dashingDown = false;
     private float _dashPressedTime; //time when dash button was pressed last
     private float _lastDashTime = 0; //time when dash was last used
     private float _dashTime;
@@ -49,9 +50,13 @@ public class PlayerController : MonoBehaviour
     {
         SpeedAceleration();
 
-        if (dashing)
+        if (dashingUp)
         {
-            Dashing();
+            DashingUp();
+        }
+        else if (dashingDown)
+        {
+            DashingDown();
         }
     }
 
@@ -81,20 +86,37 @@ public class PlayerController : MonoBehaviour
                 
                 if(timeSinceLastPress <= dashTimeGap)
                 {                   
-                    Debug.Log("dash");
-                    dashing = true;
+                    
+                    dashingUp = true;
                     _lastDashTime = Time.time;
                 }
                 else
                 {                  
-                    Debug.Log("No dash");
+                    
+                }
+                _dashPressedTime = Time.time;
+            }
+
+            if (Input.GetKeyUp(KeyCode.S))
+            {
+                float timeSinceLastPress = Time.time - _dashPressedTime;
+
+                if (timeSinceLastPress <= dashTimeGap)
+                {
+                    
+                    dashingDown = true;
+                    _lastDashTime = Time.time;
+                }
+                else
+                {
+                    
                 }
                 _dashPressedTime = Time.time;
             }
         }        
     }
 
-    public void Dashing()
+    public void DashingUp()
     {
         if (_dashTime > 0.1)
         {
@@ -105,7 +127,24 @@ public class PlayerController : MonoBehaviour
         else
         {
             carRb.velocity = Vector2.up * 0;
-            dashing = false;
+            dashingUp = false;
+            _dashTime = _startDashTime;
+        }
+
+    }
+
+    public void DashingDown()
+    {
+        if (_dashTime > 0.1)
+        {
+            _dashTime -= Time.deltaTime;
+            carRb.velocity = Vector2.down * dashSpeed;
+
+        }
+        else
+        {
+            carRb.velocity = Vector2.down * 0;
+            dashingDown = false;
             _dashTime = _startDashTime;
         }
 
