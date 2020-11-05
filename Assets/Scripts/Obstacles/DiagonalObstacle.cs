@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DiagonalObstacle : MonoBehaviour
+public class DiagonalObstacle : MonoBehaviour, Obstacle
 {
     [SerializeField] public float maxY = 8;
     [SerializeField] public float minY = -8;

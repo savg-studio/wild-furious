@@ -4,12 +4,16 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    //input constants
+    private const string AXIS_H = "Horizontal", AXIS_V = "Vertical";
+
     //RB
     Rigidbody2D carRb;
     //movement variables
     public float speed = 8.0f;
     public float verticalSpeed = 4.0f;
     public float maxSpeed = 35;
+    public float acceleration = 0.02f;
 
     //dash variables
     public float dashTimeGap = 0.3f;
@@ -24,9 +28,8 @@ public class PlayerController : MonoBehaviour
     private float _lastDashTime = 0; //time when dash was last used
     private float _dashTime;
 
-
-    //input variables
-    private const string AXIS_H = "Horizontal", AXIS_V = "Vertical";
+    // Additional variables for special power-ups
+    public bool inverted = false;
     
     
     // Start is called before the first frame update
@@ -60,16 +63,23 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        PowerUp powerUp = collision.GetComponent<PowerUp>();
+        if (powerUp != null) powerUp.OnCollected(gameObject);
+    }
+
     public void Movement()
     {
 
         Vector3 translation = new Vector3(speed * Time.deltaTime, 0, 0);
         this.transform.Translate(translation);
 
-
-        if (Mathf.Abs(Input.GetAxisRaw(AXIS_V)) > 0.2f)
+        float verticalAxis = Input.GetAxisRaw(AXIS_V);
+        if (inverted) verticalAxis = -verticalAxis;
+        if (Mathf.Abs(verticalAxis) > 0.2f)
         {
-            Vector3 translation2 = new Vector3(0, Input.GetAxisRaw(AXIS_V) * verticalSpeed * Time.deltaTime, 0);
+            Vector3 translation2 = new Vector3(0, verticalAxis * verticalSpeed * Time.deltaTime, 0);
             this.transform.Translate(translation2);
         }
     }
@@ -80,7 +90,7 @@ public class PlayerController : MonoBehaviour
         if (dashAvailable)
         {
             
-            if (Input.GetKeyUp(KeyCode.W))
+            if (Input.GetKeyUp(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))
             {
                 float timeSinceLastPress = Time.time - _dashPressedTime;
                 
@@ -97,7 +107,7 @@ public class PlayerController : MonoBehaviour
                 _dashPressedTime = Time.time;
             }
 
-            if (Input.GetKeyUp(KeyCode.S))
+            if (Input.GetKeyUp(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))
             {
                 float timeSinceLastPress = Time.time - _dashPressedTime;
 
@@ -158,7 +168,7 @@ public class PlayerController : MonoBehaviour
     public void SpeedAceleration()
     {
         if(speed<=maxSpeed)
-        speed += 0.02f;
+        speed += acceleration;
     }
 
 }

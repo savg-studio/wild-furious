@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class VerticalObstacle : MonoBehaviour
+public class VerticalObstacle : MonoBehaviour, Obstacle
 {
     [SerializeField] public float maxY = 16;
     [SerializeField] public float minY = -16;
