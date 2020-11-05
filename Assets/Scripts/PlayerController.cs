@@ -7,15 +7,15 @@ public class PlayerController : MonoBehaviour
     //RB
     Rigidbody2D carRb;
     //movement variables
-    public float speed = 1.0f;
-    public float verticalSpeed = 8.0f;
-    public float maxSpeed = 16;
+    public float speed = 8.0f;
+    public float verticalSpeed = 4.0f;
+    public float maxSpeed = 35;
 
     //dash variables
     public float dashTimeGap = 0.3f;
-    public float dashCoolDown = 5.0f;
+    public float dashCoolDown = 0.8f;
     public bool dashAvailable = true;    
-    public float _startDashTime=0.1f;
+    public float _startDashTime=0.3f;
 
     public float dashSpeed = 20;
     private bool dashingUp = false;

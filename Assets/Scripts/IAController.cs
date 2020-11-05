@@ -5,7 +5,7 @@ using UnityEngine;
 public class IAController : MonoBehaviour
 {
 
-    public float speed = 5.0f;
+    public float speed = 12.0f;
 
 
 
