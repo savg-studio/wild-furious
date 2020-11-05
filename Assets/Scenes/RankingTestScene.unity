@@ -951,7 +951,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.13725491, g: 1, b: 0.9647059, a: 0.7529412}
+  m_Color: {r: 0.0047169924, g: 1, b: 0.13383481, a: 0.7529412}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -3988,6 +3988,36 @@ PrefabInstance:
       propertyPath: tableRows.Array.data[9]
       value: 
       objectReference: {fileID: 1965404188}
+    - target: {fileID: 976238188929319591, guid: 15c7b224116b4f6469cca14eeb7d1480,
+        type: 3}
+      propertyPath: yourRowColor.r
+      value: 0.003921569
+      objectReference: {fileID: 0}
+    - target: {fileID: 976238188929319591, guid: 15c7b224116b4f6469cca14eeb7d1480,
+        type: 3}
+      propertyPath: yourRowColor.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 976238188929319591, guid: 15c7b224116b4f6469cca14eeb7d1480,
+        type: 3}
+      propertyPath: yourRowColor.b
+      value: 0.13333334
+      objectReference: {fileID: 0}
+    - target: {fileID: 976238188929319591, guid: 15c7b224116b4f6469cca14eeb7d1480,
+        type: 3}
+      propertyPath: otherRowColor.r
+      value: 0.13725491
+      objectReference: {fileID: 0}
+    - target: {fileID: 976238188929319591, guid: 15c7b224116b4f6469cca14eeb7d1480,
+        type: 3}
+      propertyPath: otherRowColor.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 976238188929319591, guid: 15c7b224116b4f6469cca14eeb7d1480,
+        type: 3}
+      propertyPath: otherRowColor.b
+      value: 0.9647059
+      objectReference: {fileID: 0}
     - target: {fileID: 976238188929319592, guid: 15c7b224116b4f6469cca14eeb7d1480,
         type: 3}
       propertyPath: m_LocalPosition.x

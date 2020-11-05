@@ -14,6 +14,8 @@ public class RankingController : MonoBehaviour
     [SerializeField] private Text placeLabel = null;
     [SerializeField] private Text scoreLabel = null;
     [SerializeField] private GameObject[] tableRows = null;
+    [SerializeField] private Color yourRowColor = new Color(1, 255, 34, 192);
+    [SerializeField] private Color otherRowColor = new Color(35, 255, 246, 192);
 
     // HIDE RANKING PANEL ON START
 
@@ -23,31 +25,29 @@ public class RankingController : MonoBehaviour
         {
             Debug.LogError("RankingController error: rankingPanel, placeLabel, scoreLabel and tableRows cannot be null");
         }
+        else
+        {
+            rankingPanel.SetActive(false);
+        }
 
-        //rankingPanel.SetActive(false);
-        StartCoroutine(GetRanking("TEST-1"));
-
-        /*var r1 = new Ranking();
-        r1.id = "yewRtu4ifsM83QbVlPEy";
-        r1.circuit = "TEST-1";
-        StartCoroutine(GetGlobalPosition(r1));
-
-        var r2 = new Ranking();
-        r2.name = "Test";
-        r2.time = 14.5f;
-        r2.character = "Mario";
-        r2.circuit = "TEST-1";
-        StartCoroutine(SaveRaking(r2));*/
+        // Example of usage: `ShowRanking("Integration Test", 10.5f, "TEST-3", "Mario", 1);`
     }
 
-    // SHOW RANKING PANEL WITH RESULTS
+    // 1º) SHOW RANKING PANEL WITH RESULTS
 
-    public void ShowRanking(Ranking you)
+    public void ShowRanking(string name, float time, string circuit, string character, int localPosition)
     {
-        placeLabel.text = "?";
-        scoreLabel.text = you.ToString() + " sec";
+        placeLabel.text = localPosition.ToString();
+        scoreLabel.text = time + " sec";
 
-        rankingPanel.SetActive(true);
+        Ranking you = new Ranking();
+        you.name = name;
+        you.time = time;
+        you.circuit = circuit;
+        you.character = character;
+
+        // Next step
+        StartCoroutine(SaveRaking(you));
     }
 
     public void HideRanking()
@@ -55,35 +55,112 @@ public class RankingController : MonoBehaviour
         rankingPanel.SetActive(false);
     }
 
-    // GET RANKING FROM SERVER
+    // 2º) SAVE PLAYER RANKING IN SERVER
 
-    private IEnumerator GetRanking(string circuit)
+    private IEnumerator SaveRaking(Ranking you)
     {
-        UnityWebRequest www = UnityWebRequest.Get(BASE_URL + "/ranking?size=10&circuit=" + circuit);
+        UnityWebRequest www = new UnityWebRequest(BASE_URL + "/ranking", "POST");
+        byte[] bodyRaw = Encoding.UTF8.GetBytes(JsonUtility.ToJson(you));
+        www.uploadHandler = new UploadHandlerRaw(bodyRaw);
+        www.downloadHandler = new DownloadHandlerBuffer();
+        www.SetRequestHeader("Content-Type", "application/json");
         yield return www.SendWebRequest();
 
         if (www.isNetworkError || www.isHttpError)
         {
             Debug.LogWarning(www.error);
         }
-
-        // Walkaround for unity deserializer not being able of convert a JSON array into a list
-        RankingArray top10 = (RankingArray) JsonUtility.FromJson("{\"content\":" + www.downloadHandler.text + "}", typeof(RankingArray));
-        
-        // Show ranking in table
-        for (int i = 0; i < tableRows.Length; i++)
+        else
         {
-            if (i < top10.content.Length)
+            you = (Ranking)JsonUtility.FromJson(www.downloadHandler.text, typeof(Ranking));
+        }
+
+        // Next step
+        StartCoroutine(GetGlobalPosition(you));
+    }
+
+    // 3º) GET GLOBAL RANKING POSITION FROM SERVER
+
+    private IEnumerator GetGlobalPosition(Ranking you)
+    {
+        UnityWebRequest www = UnityWebRequest.Get(BASE_URL + "/ranking/" + you.id + "/position?circuit=" + you.circuit);
+        yield return www.SendWebRequest();
+
+        int position = -1;
+        if (www.isNetworkError || www.isHttpError)
+        {
+            Debug.LogWarning(www.error);
+        }
+        else
+        {
+            RankingPosition positionObj = (RankingPosition) JsonUtility.FromJson(www.downloadHandler.text, typeof(RankingPosition));
+            if (positionObj != null) position = positionObj.position;
+        }
+
+        // Next step
+        StartCoroutine(GetRanking(you, position));
+    }
+
+    private class RankingPosition
+    {
+        public int position = -1;
+    }
+
+    // 4º) GET RANKING FROM SERVER
+
+    private IEnumerator GetRanking(Ranking you, int globalPosition)
+    {
+        UnityWebRequest www = UnityWebRequest.Get(BASE_URL + "/ranking?size=" + tableRows.Length + "&circuit=" + you.circuit);
+        yield return www.SendWebRequest();
+
+        if (www.isNetworkError || www.isHttpError)
+        {
+            Debug.LogWarning(www.error);
+        }
+        else
+        {
+            // Walkaround for unity deserializer not being able of convert a JSON array into a list
+            RankingArray top10 = (RankingArray)JsonUtility.FromJson("{\"content\":" + www.downloadHandler.text + "}", typeof(RankingArray));
+
+            // Show ranking in table
+            bool currentRaceShown = false;
+            for (int i = 0; i < tableRows.Length; i++)
             {
-                SetTextInChild(tableRows[i], "position", (i + 1).ToString());
-                SetTextInChild(tableRows[i], "name", top10.content[i].name);
-                SetTextInChild(tableRows[i], "time", top10.content[i].time + "s");
+                if (i < top10.content.Length)
+                {
+                    SetTextInChild(tableRows[i], "position", (i + 1).ToString());
+                    SetTextInChild(tableRows[i], "name", top10.content[i].name + " (" + top10.content[i].character + ")");
+                    SetTextInChild(tableRows[i], "time", top10.content[i].time + "s");
+
+                    if (top10.content[i].id.Equals(you.id))
+                    {
+                        currentRaceShown = true;
+                        SetImageColor(tableRows[i], yourRowColor);
+                    }
+                    else
+                    {
+                        SetImageColor(tableRows[i], otherRowColor);
+                    }
+                }
+                else
+                {
+                    tableRows[i].SetActive(false);
+                }
             }
-            else
+
+            // If your global position is not in the TOP, show it in the last row (replacing the content)
+            if (!currentRaceShown)
             {
-                tableRows[i].SetActive(false);
+                GameObject row = tableRows[tableRows.Length - 1];
+                SetTextInChild(row, "position", globalPosition.ToString());
+                SetTextInChild(row, "name", you.name + " (" + you.character + ")");
+                SetTextInChild(row, "time", you.time + "s");
+                SetImageColor(row, yourRowColor);
             }
         }
+
+        // Next step
+        rankingPanel.SetActive(true);
     }
 
     private void SetTextInChild(GameObject parent, string name, string value)
@@ -99,42 +176,12 @@ public class RankingController : MonoBehaviour
         }
     }
 
-    // SAVE PLAYER RANKING IN SERVER
-
-    private IEnumerator SaveRaking(Ranking entry)
+    private void SetImageColor(GameObject panel, Color color)
     {
-        UnityWebRequest www = new UnityWebRequest(BASE_URL + "/ranking", "POST");
-        byte[] bodyRaw = Encoding.UTF8.GetBytes(JsonUtility.ToJson(entry));
-        www.uploadHandler = new UploadHandlerRaw(bodyRaw);
-        www.downloadHandler = new DownloadHandlerBuffer();
-        www.SetRequestHeader("Content-Type", "application/json");
-        yield return www.SendWebRequest();
-        
-        if (www.isNetworkError || www.isHttpError)
+        Image img = panel.GetComponent<Image>();
+        if (img != null)
         {
-            Debug.LogWarning(www.error);
+            img.color = color;
         }
-
-        entry = (Ranking) JsonUtility.FromJson(www.downloadHandler.text, typeof(Ranking));
-    }
-
-    // GET GLOBAL RANKING POSITION FROM SERVER
-
-    private IEnumerator GetGlobalPosition(Ranking entry)
-    {
-        UnityWebRequest www = UnityWebRequest.Get(BASE_URL + "/ranking/" + entry.id + "/position?circuit=" + entry.circuit);
-        yield return www.SendWebRequest();
-
-        if (www.isNetworkError || www.isHttpError)
-        {
-            Debug.LogWarning(www.error);
-        }
-
-        RankingPosition positionObj = (RankingPosition) JsonUtility.FromJson(www.downloadHandler.text, typeof(RankingPosition));
-    }
-
-    private class RankingPosition
-    {
-        public int position = -1;
     }
 }
