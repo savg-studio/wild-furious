@@ -60,6 +60,12 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        PowerUp powerUp = collision.GetComponent<PowerUp>();
+        if (powerUp != null) powerUp.OnCollected(gameObject);
+    }
+
     public void Movement()
     {
 
@@ -80,7 +86,7 @@ public class PlayerController : MonoBehaviour
         if (dashAvailable)
         {
             
-            if (Input.GetKeyUp(KeyCode.W))
+            if (Input.GetKeyUp(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))
             {
                 float timeSinceLastPress = Time.time - _dashPressedTime;
                 
@@ -97,7 +103,7 @@ public class PlayerController : MonoBehaviour
                 _dashPressedTime = Time.time;
             }
 
-            if (Input.GetKeyUp(KeyCode.S))
+            if (Input.GetKeyUp(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))
             {
                 float timeSinceLastPress = Time.time - _dashPressedTime;
 
