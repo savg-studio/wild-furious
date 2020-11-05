@@ -169,11 +169,13 @@ MonoBehaviour:
   speed: 1
   verticalSpeed: 4
   maxSpeed: 20
+  acceleration: 0.02
   dashTimeGap: 0.3
   dashCoolDown: 1.2
   dashAvailable: 1
   _startDashTime: 0.3
   dashSpeed: 20
+  inverted: 0
 --- !u!50 &30736850
 Rigidbody2D:
   serializedVersion: 4
