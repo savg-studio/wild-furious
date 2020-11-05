@@ -39,6 +39,6 @@ public abstract class BasePowerUp : MonoBehaviour, PowerUp
     // FUNCTIONS TO BE IMPLEMENTED BY THE POWER-UP
 
     protected abstract void OnActivated(GameObject player);
-    protected abstract void OnExpired(GameObject player);
-    protected abstract int GetExpirationInSeconds();
+    protected virtual void OnExpired(GameObject player) { }
+    protected virtual int GetExpirationInSeconds() { return -1;  }
 }
