@@ -1,0 +1,14 @@
+version: '3'
+services:
+    server:
+        build: .
+        image: ranking_server
+        restart: unless-stopped
+        ports:
+          - "8081:8080"
+        logging:
+            driver: "json-file"
+            options:
+                max-size: "100m"
+                max-file: "10"
+                compress: "true"
