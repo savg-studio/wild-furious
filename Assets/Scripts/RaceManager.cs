@@ -39,6 +39,9 @@ public class RaceManager : MonoBehaviour
             ctrl.maxSpeed = 0;
             ctrl.speed = 0;
 
+            // Prevent player from moving the car
+            ctrl.brakes = true;
+
             // Open the ranking
             float time = (endTimeMillis - startTimeMillis) / 1000.0f;
             ranking.ShowRanking("Anonymus", time, circuitName, "Mario", localPosition);
