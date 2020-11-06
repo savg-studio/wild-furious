@@ -32,6 +32,8 @@ public class SpinachPowerUp : BasePowerUp
         {
             ctrl.maxSpeed /= speedMultiplier;
             ctrl.acceleration /= accelerationMultiplier;
+
+            if (ctrl.speed > ctrl.maxSpeed) ctrl.speed = ctrl.maxSpeed;
         }
     }
 }

@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6186184047953254195}
   - component: {fileID: 528172938592575369}
   m_Layer: 0
-  m_Name: obstacle_example_2
+  m_Name: verticle_obstacle_example
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -121,6 +121,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90609b578f6db574d9e8bcfab7b5415a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxY: 16
-  minY: -16
-  speed: 1
+  maxY: -60
+  minY: -105
+  speed: 2
