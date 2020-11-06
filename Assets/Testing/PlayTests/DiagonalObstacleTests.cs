@@ -8,7 +8,7 @@ namespace ObstacleTests
 {
     public class DiagonalObstacleTests
     {
-        private const string VERTICAL_OBSTACLE_PREFAB_URI = "Prefabs/diagonal_obstacle_example";
+        private const string VERTICAL_OBSTACLE_PREFAB_URI = "Prefabs/Items/Deer";
         private const int VERTICAL_OBSTACLE_MAX_Y = 8;
         private const int VERTICAL_OBSTACLE_MIN_Y = 0;
 

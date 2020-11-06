@@ -8,7 +8,7 @@ namespace ObstacleTests
 {
     public class VerticalObstacleTests
     {
-        private const string VERTICAL_OBSTACLE_PREFAB_URI = "Prefabs/verticle_obstacle_example";
+        private const string VERTICAL_OBSTACLE_PREFAB_URI = "Prefabs/Items/Cow";
         private const int VERTICAL_OBSTACLE_MAX_Y = 16;
         private const int VERTICAL_OBSTACLE_MIN_Y = 0;
 
