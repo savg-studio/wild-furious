@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 public class RankingController : MonoBehaviour
 {
-    private const string BASE_URL = "http://server.pruebas.xoanweb.com:8081";
+    private const string BASE_URL = "https://ranking-api.savgs.xoanweb.com";
 
     [SerializeField] private GameObject rankingPanel = null;
     [SerializeField] private Text placeLabel = null;

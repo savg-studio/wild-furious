@@ -3,7 +3,7 @@
 
 # This is a very basic implementation of a server for storing the ranking records only for development purposes.
 # In order to use this server in production, Firestore should be replaced by a more efficient storage and a basic
-# authentication system should be added. 
+# authentication system should be added. CORS policy should also be reviewed.
 
 ###################
 ##### IMPORTS #####
@@ -17,6 +17,7 @@ from firebase_admin import firestore
 
 from flask import Flask
 from flask import request, jsonify
+from flask_cors import CORS
 
 #####################
 ##### CONSTANTS #####
@@ -34,6 +35,8 @@ FIRESTORE_COLLECTION = os.getenv('FIRESTORE_COLLECTION', "ranking")
 #####################
 
 app = Flask(__name__)
+cors = CORS(app)
+
 db = None
 
 #####################

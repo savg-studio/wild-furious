@@ -95,7 +95,7 @@ jobs:
           server: 'savgs.xoanweb.com'
           ssh_private_key: ${{ secrets.SSH_PRIVATEKEY }} 
           local_path: './build/WebGL/WebGL/*'
-          remote_path: '/var/www/savgs/wild-furious/demo'
+          remote_path: '/home/savgs/www/wild-furious/demo'
           args: '-o ConnectTimeout=30'
 #        uses: appleboy/scp-action@master
 #        with:
@@ -104,7 +104,7 @@ jobs:
 #          username: savgs
 #          key: ${{ secrets.SSH_PRIVATEKEY }}
 #          source: "build"
-#          target: "/var/www/savgs/wild-furious/demo"
+#          target: "/home/savgs/www/wild-furious/demo"
 
       # Notification
       - name: Send success to Discord
