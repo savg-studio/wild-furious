@@ -10,6 +10,9 @@ public class SelectMenu : MonoBehaviour
     private const string PLAYER_NAME_DEFAULT = "anonymus";
 
     [SerializeField] private Button[] playButtons = new Button[0];
+    [SerializeField] private Image[] playButtonImages = new Image[0];
+    [SerializeField] private Color enabledButtonColor = new Color();
+    [SerializeField] private Color disabledButtonColor = new Color();
     [SerializeField] private InputField nameInput = null;
 
     private string selectedCharacter = null;
@@ -22,6 +25,10 @@ public class SelectMenu : MonoBehaviour
         foreach (Button btn in playButtons)
         {
             btn.enabled = false;
+        }
+        foreach (Image img in playButtonImages)
+        {
+            img.color = disabledButtonColor;
         }
 
         // Get player's name
@@ -38,6 +45,10 @@ public class SelectMenu : MonoBehaviour
             foreach (Button btn in playButtons)
             {
                 btn.enabled = true;
+            }
+            foreach (Image img in playButtonImages)
+            {
+                img.color = enabledButtonColor;
             }
         }
 

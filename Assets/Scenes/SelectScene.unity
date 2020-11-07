@@ -1142,6 +1142,11 @@ MonoBehaviour:
   playButtons:
   - {fileID: 613890212}
   - {fileID: 1301417958}
+  playButtonImages:
+  - {fileID: 613890211}
+  - {fileID: 1301417957}
+  enabledButtonColor: {r: 1, g: 1, b: 1, a: 1}
+  disabledButtonColor: {r: 1, g: 1, b: 1, a: 0.5019608}
   nameInput: {fileID: 272136703}
 --- !u!114 &1383475435
 MonoBehaviour:
