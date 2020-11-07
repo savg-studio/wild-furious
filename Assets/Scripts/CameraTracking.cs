@@ -5,9 +5,12 @@ using UnityEngine;
 public class CameraTracking: MonoBehaviour
 {
 
-    public Vector3 cameraOffset = new Vector3(0.0f, 0f, -20f);
-    private Transform target;
     
+    private Transform target;
+    public float cameraXOffset = 20f;
+    public float cameraYOffset = 0f;
+    public float cameraZOffset = 0f;
+
 
     // Start is called before the first frame update
     void Start()
@@ -20,9 +23,14 @@ public class CameraTracking: MonoBehaviour
 
 
     private void LateUpdate()
-    {       
-            this.transform.position = target.TransformPoint(cameraOffset);
-            this.transform.LookAt(target);
+    {
+        Vector3 pos = transform.position;
+        pos.x = target.transform.position.x;
+        transform.position = pos + new Vector3 (cameraXOffset, cameraYOffset, cameraZOffset); 
+        
+
+        //this.transform.position = target.TransformPoint(cameraOffset);
+        //    this.transform.LookAt(target);
        
     }
 }
