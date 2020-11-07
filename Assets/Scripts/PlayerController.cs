@@ -30,9 +30,6 @@ public class PlayerController : MonoBehaviour
 
     // Additional variables for special power-ups
     public bool inverted = false;
-
-    // Brakes (used when showing ranking for example)
-    public bool brakes = false;
     
     
     // Start is called before the first frame update
@@ -47,8 +44,6 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (brakes) return;
-
         DashCooldown();
         Movement();
         DashManagement();
@@ -56,8 +51,6 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (brakes) return;
-
         SpeedAceleration();
 
         if (dashingUp)

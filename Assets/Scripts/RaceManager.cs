@@ -37,13 +37,15 @@ public class RaceManager : MonoBehaviour
         PlayerController ctrl = collision.GetComponent<PlayerController>();
         if (ctrl != null)
         {
+            Debug.Log(ctrl.acceleration);
+            Debug.Log(ctrl.maxSpeed);
+            Debug.Log(ctrl.speed);
             // Stop the car
             ctrl.acceleration = 0;
             ctrl.maxSpeed = 0;
             ctrl.speed = 0;
-
-            // Prevent player from moving the car
-            ctrl.brakes = true;
+            ctrl.verticalSpeed = 0;
+            ctrl.dashSpeed = 0;
 
             // Open the ranking
             float time = (endTimeMillis - startTimeMillis) / 1000.0f;
@@ -51,8 +53,16 @@ public class RaceManager : MonoBehaviour
         }
         else if (collision.GetComponent<IAController>() != null)
         {
-            // If the collider is a CPU car, increase the local position counter
-            localPosition++;
+            // Check if the object is a CPU car
+            IAController cpu = collision.GetComponent<IAController>();
+            if (cpu != null)
+            {
+                // Stop the car
+                cpu.speed = 0;
+                
+                // If the collider is a CPU car, increase the local position counter
+                localPosition++;
+            }
         }
     }
 
