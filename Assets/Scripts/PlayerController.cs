@@ -174,8 +174,10 @@ public class PlayerController : MonoBehaviour
 
     public void SpeedAceleration()
     {
-        if(speed<=maxSpeed)
-        speed += acceleration;
+        if(speed < maxSpeed)
+        {
+            speed += acceleration * Time.fixedDeltaTime;
+        }
     }
 
 }
