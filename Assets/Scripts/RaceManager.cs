@@ -10,11 +10,14 @@ public class RaceManager : MonoBehaviour
     [SerializeField] private RankingController ranking = null;
     [SerializeField] private string circuitName = "UNKNOWN";
 
-    private long startTimeMillis = -1;
-    private int localPosition = 0;
+    private long startTimeMillis;
+    private int localPosition;
 
     void Start()
     {
+        // Set initial local position
+        localPosition = 1;
+
         // Record start time of the race
         startTimeMillis = getTimeMillis();
 
@@ -46,8 +49,9 @@ public class RaceManager : MonoBehaviour
             float time = (endTimeMillis - startTimeMillis) / 1000.0f;
             ranking.ShowRanking("Anonymus", time, circuitName, "Mario", localPosition);
         }
-        else
+        else if (collision.GetComponent<IAController>() != null)
         {
+            // If the collider is a CPU car, increase the local position counter
             localPosition++;
         }
     }

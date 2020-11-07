@@ -6,15 +6,15 @@ using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
-    [SerializeField] private Text savgsTitle;
-    [SerializeField] private Text marioCarTitle;
-    [SerializeField] private Text wildAndFuriousTitle;
+    [SerializeField] private Text savgsTitle = null;
+    [SerializeField] private Text marioCarTitle = null;
+    [SerializeField] private Text wildAndFuriousTitle = null;
     [SerializeField] private Color textColor = new Color();
 
-    [SerializeField] private Text playButtonText;
-    [SerializeField] private Text exitButtonText;
-    [SerializeField] private Image playButtonImage;
-    [SerializeField] private Image exitButtonImage;
+    [SerializeField] private Text playButtonText = null;
+    [SerializeField] private Text exitButtonText = null;
+    [SerializeField] private Image playButtonImage = null;
+    [SerializeField] private Image exitButtonImage = null;
     [SerializeField] private Color buttonTextColor = new Color();
     [SerializeField] private Color buttonImageColor = new Color();
 
