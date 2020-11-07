@@ -13,7 +13,7 @@ public class PlayerController : MonoBehaviour
     public float speed = 8.0f;
     public float verticalSpeed = 4.0f;
     public float maxSpeed = 35;
-    public float acceleration = 0.02f;
+    public float acceleration = 1f;
 
     //dash variables
     public float dashTimeGap = 0.3f;
@@ -169,7 +169,7 @@ public class PlayerController : MonoBehaviour
     {
         if(speed < maxSpeed)
         {
-            speed += acceleration * Time.fixedDeltaTime;
+            speed *= 1 + (acceleration * Time.fixedDeltaTime);
         }
     }
 
