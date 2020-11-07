@@ -47,12 +47,14 @@ public class SelectMenu : MonoBehaviour
 
     public void NormalMode()
     {
+        StopMusic();
         SavePlayerName();
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
     public void SpecialMode()
     {
+        StopMusic();
         SavePlayerName();
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 2);
     }
@@ -80,5 +82,11 @@ public class SelectMenu : MonoBehaviour
 
         PlayerPrefs.SetString(PLAYER_NAME_KEY, namePlayer);
         PlayerPrefs.Save();
+    }
+
+    private void StopMusic()
+    {
+        MusicController music = FindObjectOfType<MusicController>();
+        if (music != null) music.Stop();
     }
 }

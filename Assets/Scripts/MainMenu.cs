@@ -22,11 +22,15 @@ public class MainMenu : MonoBehaviour
 
     void Start()
     {
+        // Start audio
+        MusicController music = FindObjectOfType<MusicController>();
+        if (music != null) music.Play();
+
+        // Set initial color
         Color initialTextColor = GetAlphaColor(textColor, 0);
         savgsTitle.color = initialTextColor;
         marioCarTitle.color = initialTextColor;
         wildAndFuriousTitle.color = initialTextColor;
-
         Color initialButtonTextColor = GetAlphaColor(buttonTextColor, 0);
         playButtonText.color = initialButtonTextColor;
         exitButtonText.color = initialButtonTextColor;
@@ -34,6 +38,7 @@ public class MainMenu : MonoBehaviour
         playButtonImage.color = initialButtonImageColor;
         exitButtonImage.color = initialButtonImageColor;
 
+        // Start animation
         StartCoroutine(AnimateTitles());
     }
 
