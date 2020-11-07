@@ -8,8 +8,10 @@ using UnityEngine.Networking;
 
 public class MusicController : MonoBehaviour
 {
-    private const string ALTERNATIVE_AUDIO_URL = "https://savgs.xoanweb.com/wild-furious/demo/main_menu_song__compressed.ogg";
-    private const string ALTERNATIVE_AUDIO_NAME = "main_menu_song__compressed.ogg";
+    private const string ALTERNATIVE_AUDIO_MP3_URL = "https://savgs.xoanweb.com/wild-furious/demo/main_menu_song__compressed.mp3";
+    private const string ALTERNATIVE_AUDIO_MP3_NAME = "main_menu_song__compressed.mp3";
+    private const string ALTERNATIVE_AUDIO_OGG_URL = "https://savgs.xoanweb.com/wild-furious/demo/main_menu_song__compressed.mp3";
+    private const string ALTERNATIVE_AUDIO_OGG_NAME = "main_menu_song__compressed.mp3";
 
     private static MusicController instance;
 
@@ -46,7 +48,17 @@ public class MusicController : MonoBehaviour
 
     private IEnumerator GetOnlineAudioClip()
     {
-        UnityWebRequest www = UnityWebRequestMultimedia.GetAudioClip(ALTERNATIVE_AUDIO_URL, AudioType.OGGVORBIS);
+        string url = ALTERNATIVE_AUDIO_OGG_URL;
+        string name = ALTERNATIVE_AUDIO_OGG_NAME;
+        AudioType type = AudioType.OGGVORBIS;
+        if (Application.platform == RuntimePlatform.WebGLPlayer)
+        {
+            url = ALTERNATIVE_AUDIO_MP3_URL;
+            name = ALTERNATIVE_AUDIO_MP3_NAME;
+            type = AudioType.MPEG;
+        }
+
+        UnityWebRequest www = UnityWebRequestMultimedia.GetAudioClip(url, type);
         yield return www.SendWebRequest();
 
         if (www.isNetworkError || www.isHttpError)
@@ -56,7 +68,7 @@ public class MusicController : MonoBehaviour
         else
         {
             AudioClip clip = DownloadHandlerAudioClip.GetContent(www);
-            clip.name = ALTERNATIVE_AUDIO_NAME;
+            clip.name = name;
             audioSource.clip = clip;
             audioSource.Play();
         }
