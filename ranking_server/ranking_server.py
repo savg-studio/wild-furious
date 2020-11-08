@@ -51,11 +51,12 @@ def root():
 def getRanking():
     size = request.args.get('size', default=10, type=int)
     circuit = request.args.get('circuit', default=None)
+	reverse = request.args.get('reverse', default=False)
     
     query = db.collection(FIRESTORE_COLLECTION)
     if circuit is not None:
         query = query.where("circuit", "==", circuit)
-    query = query.order_by("time")
+    query = query.order_by("time", direction=(firestore.Query.DESCENDING if reverse else firestore.Query.ASCENDING))
     query = query.limit(size)
     
     return jsonify([{
@@ -88,11 +89,12 @@ def saveRanking():
 @app.route("/ranking/<string:id>/position", methods=["GET"])
 def getPosition(id):
     circuit = request.args.get('circuit', default=None)
+	reverse = request.args.get('reverse', default=False)
     
     query = db.collection(FIRESTORE_COLLECTION)
     if circuit is not None:
         query = query.where("circuit", "==", circuit)
-    query = query.order_by("time")
+    query = query.order_by("time", direction=(firestore.Query.DESCENDING if reverse else firestore.Query.ASCENDING))
     
     count = 1
     for doc in query.stream():
