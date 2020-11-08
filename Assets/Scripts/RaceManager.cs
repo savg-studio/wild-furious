@@ -10,6 +10,12 @@ public class RaceManager : MonoBehaviour
     private const string DEFAULT_CIRCUIT = "UNKNOWN";
     private const string DEFAULT_CHARACTER = "Mario";
     private const string DEFAULT_PLAYER = "Anonymus";
+    private const bool DEFAULT_REVERSE = false;
+
+    [SerializeField]
+    [Header("Number of Players+CPUs")]
+    [Tooltip("How many cars are in the circuit? This is used in the special mode to calculate the reverse local position")]
+    private int numberOfCars = 3;
 
     [SerializeField] private RankingController ranking = null;
 
@@ -63,11 +69,11 @@ public class RaceManager : MonoBehaviour
             // Open the ranking
             if (raceInfo != null)
             {
-                ranking.ShowRanking(raceInfo.playerName, time, raceInfo.circuit, raceInfo.character, localPosition);
+                ranking.ShowRanking(raceInfo.playerName, time, raceInfo.circuit, raceInfo.character, raceInfo.reverse ? numberOfCars - localPosition + 1 : localPosition, raceInfo.reverse);
             }
             else
             {
-                ranking.ShowRanking(DEFAULT_PLAYER, time, DEFAULT_CIRCUIT, DEFAULT_CHARACTER, localPosition);
+                ranking.ShowRanking(DEFAULT_PLAYER, time, DEFAULT_CIRCUIT, DEFAULT_CHARACTER, DEFAULT_REVERSE ? numberOfCars - localPosition + 1 : localPosition, DEFAULT_REVERSE);
             }
         }
         else if (collision.GetComponent<IAController>() != null)

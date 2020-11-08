@@ -35,7 +35,7 @@ public class RankingController : MonoBehaviour
 
     // 1º) SHOW RANKING PANEL WITH RESULTS
 
-    public void ShowRanking(string name, float time, string circuit, string character, int localPosition)
+    public void ShowRanking(string name, float time, string circuit, string character, int localPosition, bool reverse)
     {
         placeLabel.text = localPosition.ToString();
         scoreLabel.text = time + " sec";
@@ -47,7 +47,7 @@ public class RankingController : MonoBehaviour
         you.character = character;
 
         // Next step
-        StartCoroutine(SaveRaking(you));
+        StartCoroutine(SaveRaking(you, reverse));
     }
 
     public void HideRanking()
@@ -57,7 +57,7 @@ public class RankingController : MonoBehaviour
 
     // 2º) SAVE PLAYER RANKING IN SERVER
 
-    private IEnumerator SaveRaking(Ranking you)
+    private IEnumerator SaveRaking(Ranking you, bool reverse)
     {
         UnityWebRequest www = new UnityWebRequest(BASE_URL + "/ranking", "POST");
         byte[] bodyRaw = Encoding.UTF8.GetBytes(JsonUtility.ToJson(you));
@@ -76,14 +76,14 @@ public class RankingController : MonoBehaviour
         }
 
         // Next step
-        StartCoroutine(GetGlobalPosition(you));
+        StartCoroutine(GetGlobalPosition(you, reverse));
     }
 
     // 3º) GET GLOBAL RANKING POSITION FROM SERVER
 
-    private IEnumerator GetGlobalPosition(Ranking you)
+    private IEnumerator GetGlobalPosition(Ranking you, bool reverse)
     {
-        UnityWebRequest www = UnityWebRequest.Get(BASE_URL + "/ranking/" + you.id + "/position?circuit=" + you.circuit);
+        UnityWebRequest www = UnityWebRequest.Get(BASE_URL + "/ranking/" + you.id + "/position?circuit=" + you.circuit + "&reverse=" + reverse.ToString().ToLower());
         yield return www.SendWebRequest();
 
         int position = -1;
@@ -98,7 +98,7 @@ public class RankingController : MonoBehaviour
         }
 
         // Next step
-        StartCoroutine(GetRanking(you, position));
+        StartCoroutine(GetRanking(you, position, reverse));
     }
 
     private class RankingPosition
@@ -108,9 +108,9 @@ public class RankingController : MonoBehaviour
 
     // 4º) GET RANKING FROM SERVER
 
-    private IEnumerator GetRanking(Ranking you, int globalPosition)
+    private IEnumerator GetRanking(Ranking you, int globalPosition, bool reverse)
     {
-        UnityWebRequest www = UnityWebRequest.Get(BASE_URL + "/ranking?size=" + tableRows.Length + "&circuit=" + you.circuit);
+        UnityWebRequest www = UnityWebRequest.Get(BASE_URL + "/ranking?size=" + tableRows.Length + "&circuit=" + you.circuit + "&reverse=" + reverse.ToString().ToLower());
         yield return www.SendWebRequest();
 
         if (www.isNetworkError || www.isHttpError)

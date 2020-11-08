@@ -51,7 +51,7 @@ def root():
 def getRanking():
     size = request.args.get('size', default=10, type=int)
     circuit = request.args.get('circuit', default=None)
-	reverse = request.args.get('reverse', default=False)
+	reverse = request.args.get('reverse', default="") == "true"
     
     query = db.collection(FIRESTORE_COLLECTION)
     if circuit is not None:
@@ -89,7 +89,7 @@ def saveRanking():
 @app.route("/ranking/<string:id>/position", methods=["GET"])
 def getPosition(id):
     circuit = request.args.get('circuit', default=None)
-	reverse = request.args.get('reverse', default=False)
+	reverse = request.args.get('reverse', default="") == "true"
     
     query = db.collection(FIRESTORE_COLLECTION)
     if circuit is not None:
