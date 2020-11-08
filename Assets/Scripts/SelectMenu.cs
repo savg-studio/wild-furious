@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public class SelectMenu : MonoBehaviour
 {
+    public const string DATA_GAMEOBJECT_NAME = "Data";
+
     private const string PLAYER_NAME_KEY = "name";
     private const string PLAYER_NAME_DEFAULT = "anonymus";
 
@@ -60,6 +62,7 @@ public class SelectMenu : MonoBehaviour
     {
         StopMusic();
         SavePlayerName();
+        PassInfoToCircuit(false);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
@@ -67,6 +70,7 @@ public class SelectMenu : MonoBehaviour
     {
         StopMusic();
         SavePlayerName();
+        PassInfoToCircuit(true);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 2);
     }
 
@@ -99,5 +103,18 @@ public class SelectMenu : MonoBehaviour
     {
         MusicController music = FindObjectOfType<MusicController>();
         if (music != null) music.Stop();
+    }
+
+    private void PassInfoToCircuit(bool specialMode)
+    {
+        GameObject dataObj = new GameObject(DATA_GAMEOBJECT_NAME);
+        RaceInfo raceInfo = dataObj.AddComponent<RaceInfo>();
+
+        raceInfo.playerName = nameInput == null || string.IsNullOrWhiteSpace(nameInput.text) ? PLAYER_NAME_DEFAULT : nameInput.text;
+        raceInfo.circuit = specialMode ? "SPECIAL-MODE" : "NORMAL-MODE";
+        raceInfo.character = selectedCharacter;
+        raceInfo.reverse = specialMode;
+
+        DontDestroyOnLoad(dataObj);
     }
 }

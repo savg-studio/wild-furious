@@ -10,8 +10,8 @@ public class MusicController : MonoBehaviour
 {
     private const string ALTERNATIVE_AUDIO_MP3_URL = "https://savgs.xoanweb.com/wild-furious/demo/main_menu_song__compressed.mp3";
     private const string ALTERNATIVE_AUDIO_MP3_NAME = "main_menu_song__compressed.mp3";
-    private const string ALTERNATIVE_AUDIO_OGG_URL = "https://savgs.xoanweb.com/wild-furious/demo/main_menu_song__compressed.mp3";
-    private const string ALTERNATIVE_AUDIO_OGG_NAME = "main_menu_song__compressed.mp3";
+    private const string ALTERNATIVE_AUDIO_OGG_URL = "https://savgs.xoanweb.com/wild-furious/demo/main_menu_song__compressed.ogg";
+    private const string ALTERNATIVE_AUDIO_OGG_NAME = "main_menu_song__compressed.ogg";
 
     private static MusicController instance;
 

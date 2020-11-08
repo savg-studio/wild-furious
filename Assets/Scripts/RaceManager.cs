@@ -7,8 +7,13 @@ public class RaceManager : MonoBehaviour
 {
     // IMPORTANT: This script must be placed inside the finish mark
 
+    private const string DEFAULT_CIRCUIT = "UNKNOWN";
+    private const string DEFAULT_CHARACTER = "Mario";
+    private const string DEFAULT_PLAYER = "Anonymus";
+
     [SerializeField] private RankingController ranking = null;
-    [SerializeField] private string circuitName = "UNKNOWN";
+
+    private RaceInfo raceInfo = null;
 
     private long startTimeMillis;
     private int localPosition;
@@ -21,10 +26,18 @@ public class RaceManager : MonoBehaviour
         // Record start time of the race
         startTimeMillis = getTimeMillis();
 
+        // Get ranking controller reference
         if (ranking == null)
         {
             GameObject rankingObj = GameObject.Find("Ranking");
             if (rankingObj != null) ranking = rankingObj.GetComponent<RankingController>();
+        }
+
+        // Get race info reference
+        if (raceInfo == null)
+        {
+            GameObject dataObj = GameObject.Find(SelectMenu.DATA_GAMEOBJECT_NAME);
+            if (dataObj != null) raceInfo = dataObj.GetComponent<RaceInfo>();
         }
     }
     
@@ -37,9 +50,6 @@ public class RaceManager : MonoBehaviour
         PlayerController ctrl = collision.GetComponent<PlayerController>();
         if (ctrl != null)
         {
-            Debug.Log(ctrl.acceleration);
-            Debug.Log(ctrl.maxSpeed);
-            Debug.Log(ctrl.speed);
             // Stop the car
             ctrl.acceleration = 0;
             ctrl.maxSpeed = 0;
@@ -47,9 +57,18 @@ public class RaceManager : MonoBehaviour
             ctrl.verticalSpeed = 0;
             ctrl.dashSpeed = 0;
 
-            // Open the ranking
+            // Calculate time
             float time = (endTimeMillis - startTimeMillis) / 1000.0f;
-            ranking.ShowRanking("Anonymus", time, circuitName, "Mario", localPosition);
+
+            // Open the ranking
+            if (raceInfo != null)
+            {
+                ranking.ShowRanking(raceInfo.playerName, time, raceInfo.circuit, raceInfo.character, localPosition);
+            }
+            else
+            {
+                ranking.ShowRanking(DEFAULT_PLAYER, time, DEFAULT_CIRCUIT, DEFAULT_CHARACTER, localPosition);
+            }
         }
         else if (collision.GetComponent<IAController>() != null)
         {
