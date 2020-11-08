@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class RankingController : MonoBehaviour
@@ -31,6 +32,20 @@ public class RankingController : MonoBehaviour
         }
 
         // Example of usage: `ShowRanking("Integration Test", 10.5f, "TEST-3", "Mario", 1);`
+    }
+
+    // PRESS ESC/SPACE/ENTER/FIRE/JUMP TO GO BACK TO MENU
+
+    void Update()
+    {
+        if (rankingPanel.activeSelf)
+        {
+            if (Input.GetKeyDown(KeyCode.KeypadEnter) || Input.GetKeyDown(KeyCode.Insert) || Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Escape) 
+                || Input.GetButtonDown("Fire1") || Input.GetButtonDown("Fire2") || Input.GetButtonDown("Fire3") || Input.GetButtonDown("Jump"))
+            {
+                SceneManager.LoadScene(0);
+            }
+        }
     }
 
     // 1º) SHOW RANKING PANEL WITH RESULTS

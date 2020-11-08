@@ -18,6 +18,7 @@ public class RaceManager : MonoBehaviour
     private int numberOfCars = 3;
 
     [SerializeField] private RankingController ranking = null;
+    [SerializeField] private GameObject pauseMenu = null;
 
     private RaceInfo raceInfo = null;
 
@@ -66,6 +67,9 @@ public class RaceManager : MonoBehaviour
             // Calculate time
             float time = (endTimeMillis - startTimeMillis) / 1000.0f;
 
+            // Disable pause menu so it doesn't interfeer with the ranking view
+            DisablePauseMenu();
+
             // Open the ranking
             if (raceInfo != null)
             {
@@ -94,5 +98,11 @@ public class RaceManager : MonoBehaviour
     private long getTimeMillis()
     {
         return DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+    }
+
+    private void DisablePauseMenu()
+    {
+        if (pauseMenu == null) pauseMenu = GameObject.Find("PauseMenu");
+        if (pauseMenu != null) pauseMenu.SetActive(false);
     }
 }

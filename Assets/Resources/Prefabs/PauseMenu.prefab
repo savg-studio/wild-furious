@@ -285,7 +285,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Settings
+  m_Text: Back to Menu
 --- !u!1 &428221475075846191
 GameObject:
   m_ObjectHideFlags: 0
@@ -299,7 +299,7 @@ GameObject:
   - component: {fileID: 428221475075846186}
   - component: {fileID: 428221475075846189}
   m_Layer: 5
-  m_Name: SettingsButton
+  m_Name: BackToMenuButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -406,7 +406,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2234023139244810559}
-        m_MethodName: OpenSettings
+        m_MethodName: BackToMenu
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

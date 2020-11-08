@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PauseMenu : MonoBehaviour
 {
@@ -44,9 +45,10 @@ public class PauseMenu : MonoBehaviour
         Resume();
     }
 
-    public void OpenSettings()
+    public void BackToMenu()
     {
-        Debug.Log("Settings menu not implemented!");
+        Resume(); // Needed to restart back the normal time
+        SceneManager.LoadScene(0);
     }
 
     public void QuitGame()
