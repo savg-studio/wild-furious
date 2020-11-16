@@ -22,6 +22,8 @@ public class RaceManager : MonoBehaviour
 
     private RaceInfo raceInfo = null;
 
+    private List<int> alreadyRegisteredCars;
+
     private long startTimeMillis;
     private int localPosition;
 
@@ -29,6 +31,9 @@ public class RaceManager : MonoBehaviour
     {
         // Set initial local position
         localPosition = 1;
+
+        // Reset already registered cars
+        alreadyRegisteredCars = new List<int>();
 
         // Record start time of the race
         startTimeMillis = getTimeMillis();
@@ -53,7 +58,7 @@ public class RaceManager : MonoBehaviour
         // Save end time as soon as possible in case this is the player
         long endTimeMillis = getTimeMillis();
         
-        // If the object has a component "PlayerController", it's the player
+        // If the object has a component "PlayerController", it's a car
         PlayerController ctrl = collision.GetComponent<PlayerController>();
         if (ctrl != null)
         {
@@ -64,33 +69,33 @@ public class RaceManager : MonoBehaviour
             ctrl.verticalSpeed = 0;
             ctrl.dashSpeed = 0;
 
-            // Calculate time
-            float time = (endTimeMillis - startTimeMillis) / 1000.0f;
-
-            // Disable pause menu so it doesn't interfeer with the ranking view
-            DisablePauseMenu();
-
-            // Open the ranking
-            if (raceInfo != null)
+            if (ctrl is IAController) // It's a CPU
             {
-                ranking.ShowRanking(raceInfo.playerName, time, raceInfo.circuit, raceInfo.character, raceInfo.reverse ? numberOfCars - localPosition + 1 : localPosition, raceInfo.reverse);
-            }
-            else
-            {
-                ranking.ShowRanking(DEFAULT_PLAYER, time, DEFAULT_CIRCUIT, DEFAULT_CHARACTER, DEFAULT_REVERSE ? numberOfCars - localPosition + 1 : localPosition, DEFAULT_REVERSE);
-            }
-        }
-        else if (collision.GetComponent<IAController>() != null)
-        {
-            // Check if the object is a CPU car
-            IAController cpu = collision.GetComponent<IAController>();
-            if (cpu != null)
-            {
-                // Stop the car
-                cpu.speed = 0;
+                // Increase the local position counter
+                if (!alreadyRegisteredCars.Contains(ctrl.gameObject.GetInstanceID()))
+                {
+                    localPosition++;
+                    alreadyRegisteredCars.Add(ctrl.gameObject.GetInstanceID());
+                }
                 
-                // If the collider is a CPU car, increase the local position counter
-                localPosition++;
+            }
+            else // It's the player
+            {
+                // Calculate time
+                float time = (endTimeMillis - startTimeMillis) / 1000.0f;
+
+                // Disable pause menu so it doesn't interfeer with the ranking view
+                DisablePauseMenu();
+
+                // Open the ranking
+                if (raceInfo != null)
+                {
+                    ranking.ShowRanking(raceInfo.playerName, time, raceInfo.circuit, raceInfo.character, raceInfo.reverse ? numberOfCars - localPosition + 1 : localPosition, raceInfo.reverse);
+                }
+                else
+                {
+                    ranking.ShowRanking(DEFAULT_PLAYER, time, DEFAULT_CIRCUIT, DEFAULT_CHARACTER, DEFAULT_REVERSE ? numberOfCars - localPosition + 1 : localPosition, DEFAULT_REVERSE);
+                }
             }
         }
     }

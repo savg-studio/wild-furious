@@ -8,7 +8,7 @@ public class PlayerController : MonoBehaviour
     private const string AXIS_H = "Horizontal", AXIS_V = "Vertical";
 
     //RB
-    Rigidbody2D carRb;
+    protected Rigidbody2D carRb;
     //movement variables
     public float speed = 8.0f;
     public float verticalSpeed = 4.0f;
@@ -22,11 +22,11 @@ public class PlayerController : MonoBehaviour
     public float _startDashTime=0.3f;
 
     public float dashSpeed = 20;
-    private bool dashingUp = false;
-    private bool dashingDown = false;
-    private float _dashPressedTime; //time when dash button was pressed last
-    private float _lastDashTime = 0; //time when dash was last used
-    private float _dashTime;
+    protected bool dashingUp = false;
+    protected bool dashingDown = false;
+    protected float _dashPressedTime; //time when dash button was pressed last
+    protected float _lastDashTime = 0; //time when dash was last used
+    protected float _dashTime;
 
     // Additional variables for special power-ups
     public bool inverted = false;
@@ -69,9 +69,8 @@ public class PlayerController : MonoBehaviour
         if (powerUp != null) powerUp.OnCollected(gameObject);
     }
 
-    public void Movement()
+    public virtual void Movement()
     {
-
         Vector3 translation = new Vector3(speed * Time.deltaTime, 0, 0);
         this.transform.Translate(translation);
 
@@ -84,7 +83,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void DashManagement()
+    public virtual void DashManagement()
     {   
 
         if (dashAvailable)

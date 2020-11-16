@@ -7,5 +7,5 @@ public class RaceInfo : MonoBehaviour
     public string playerName;
     public string character;
     public string circuit;
-    public bool reverse;
+    public bool reverse = false;
 }
