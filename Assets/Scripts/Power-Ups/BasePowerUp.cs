@@ -4,12 +4,14 @@ using UnityEngine;
 
 public abstract class BasePowerUp : MonoBehaviour, PowerUp
 {
+    private Collider2D trigger = null;
+
     void Start()
     {
         // Add collider trigger if not pressent
-        Collider2D collider = gameObject.GetComponent<Collider2D>();
-        if (collider == null) collider = gameObject.AddComponent<BoxCollider2D>();
-        if (collider != null) collider.isTrigger = true;
+        trigger = gameObject.GetComponent<Collider2D>();
+        if (trigger == null) trigger = gameObject.AddComponent<BoxCollider2D>();
+        if (trigger != null) trigger.isTrigger = true;
     }
 
     public void OnCollected(GameObject player)
@@ -24,6 +26,12 @@ public abstract class BasePowerUp : MonoBehaviour, PowerUp
         // Hide power-up icon
         SpriteRenderer renderer = gameObject.GetComponent<SpriteRenderer>();
         if (renderer != null) renderer.enabled = false;
+
+        // Disable trigger
+        if (trigger != null)
+        {
+            trigger.enabled = false;
+        }
 
         // Call activated listener
         OnActivated(player);

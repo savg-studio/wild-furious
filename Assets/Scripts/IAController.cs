@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class IAController : MonoBehaviour
 {
-
-    
-
     //input constants
     private const string AXIS_H = "Horizontal", AXIS_V = "Vertical";
 
