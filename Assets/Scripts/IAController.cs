@@ -27,6 +27,8 @@ public class IAController : MonoBehaviour
     public float dashSpeed = 20;
     private bool dashingUp = false;
     private bool dashingDown = false;
+    public bool dashArriba = false;
+    public bool dashAbajo = false;
     private float _dashPressedTime; //time when dash button was pressed last
     private float _lastDashTime = 0; //time when dash was last used
     private float _dashTime;
@@ -47,29 +49,50 @@ public class IAController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //DashCooldown();
+        DashCooldown();
         Movement();
-        //DashManagement();
+        DashManagement();
     }
 
     private void FixedUpdate()
     {
         SpeedAceleration();
 
-        //if (dashingUp)
-        //{
-        //    DashingUp();
-        //}
-        //else if (dashingDown)
-        //{
-        //    DashingDown();
-        //}
+        if (dashingUp)
+        {
+            DashingUp();
+        }
+        else if (dashingDown)
+        {
+            DashingDown();
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         PowerUp powerUp = collision.GetComponent<PowerUp>();
         if (powerUp != null) powerUp.OnCollected(gameObject);
+        else
+        {
+            Transform posPlayer = collision.GetComponent<Transform>();
+            if (this.transform.position.y > posPlayer.transform.position.y)
+            {
+                Debug.Log("Dashear hacia abajo");
+                dashAbajo = true;
+            }
+            else
+            {
+                Debug.Log("Dashear hacia arriba");
+                dashArriba = true;
+            }
+        }
+
+
+        
+
+ 
+
+
     }
 
     public void Movement()
@@ -78,95 +101,42 @@ public class IAController : MonoBehaviour
         Vector3 translation = new Vector3(speed * Time.deltaTime, 0, 0);
         this.transform.Translate(translation);
 
-        //float verticalAxis = Input.GetAxisRaw(AXIS_V);
-        //if (inverted) verticalAxis = -verticalAxis;
-        //if (Mathf.Abs(verticalAxis) > 0.2f)
-        //{
-        //    Vector3 translation2 = new Vector3(0, verticalAxis * verticalSpeed * Time.deltaTime, 0);
-        //    this.transform.Translate(translation2);
-        //}
     }
 
-    //public void DashManagement()
-    //{
+    public void DashingUp()
+    {
+        if (_dashTime > 0.1)
+        {
+            _dashTime -= Time.deltaTime;
+            carRb.velocity = Vector2.up * dashSpeed;
 
-    //    if (dashAvailable)
-    //    {
+        }
+        else
+        {
+            carRb.velocity = Vector2.up * 0;
+            dashingUp = false;
+            _dashTime = _startDashTime;
+        }
 
-    //        if (Input.GetKeyUp(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))
-    //        {
-    //            float timeSinceLastPress = Time.time - _dashPressedTime;
+    }
 
-    //            if (timeSinceLastPress <= dashTimeGap)
-    //            {
+    public void DashingDown()
+    {
+        if (_dashTime > 0.1)
+        {
+            _dashTime -= Time.deltaTime;
+            carRb.velocity = Vector2.down * dashSpeed;
 
-    //                dashingUp = true;
-    //                _lastDashTime = Time.time;
-    //            }
-    //            else
-    //            {
+        }
+        else
+        {
+            carRb.velocity = Vector2.down * 0;
+            dashingDown = false;
+            _dashTime = _startDashTime;
+        }
 
-    //            }
-    //            _dashPressedTime = Time.time;
-    //        }
+    }
 
-    //        if (Input.GetKeyUp(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))
-    //        {
-    //            float timeSinceLastPress = Time.time - _dashPressedTime;
-
-    //            if (timeSinceLastPress <= dashTimeGap)
-    //            {
-
-    //                dashingDown = true;
-    //                _lastDashTime = Time.time;
-    //            }
-    //            else
-    //            {
-
-    //            }
-    //            _dashPressedTime = Time.time;
-    //        }
-    //    }
-    //}
-
-    //public void DashingUp()
-    //{
-    //    if (_dashTime > 0.1)
-    //    {
-    //        _dashTime -= Time.deltaTime;
-    //        carRb.velocity = Vector2.up * dashSpeed;
-
-    //    }
-    //    else
-    //    {
-    //        carRb.velocity = Vector2.up * 0;
-    //        dashingUp = false;
-    //        _dashTime = _startDashTime;
-    //    }
-
-    //}
-
-    //public void DashingDown()
-    //{
-    //    if (_dashTime > 0.1)
-    //    {
-    //        _dashTime -= Time.deltaTime;
-    //        carRb.velocity = Vector2.down * dashSpeed;
-
-    //    }
-    //    else
-    //    {
-    //        carRb.velocity = Vector2.down * 0;
-    //        dashingDown = false;
-    //        _dashTime = _startDashTime;
-    //    }
-
-    //}
-
-    //public void DashCooldown()
-    //{
-    //    dashAvailable = (Time.time - _lastDashTime) > dashCoolDown;
-    //}
 
     public void SpeedAceleration()
     {
@@ -174,5 +144,33 @@ public class IAController : MonoBehaviour
         {
             speed *= 1 + (acceleration * Time.fixedDeltaTime);
         }
+    }
+
+    public void DashManagement()
+    {
+
+        if (dashAvailable)
+        {
+            dashAvailable = false;
+            if (dashArriba)
+            {
+                    dashArriba = false;
+                    dashingUp = true;
+                    _lastDashTime = Time.time;
+           
+            }
+
+            if (dashAbajo)
+            {
+                    dashAbajo = false;
+                    dashingDown = true;
+                    _lastDashTime = Time.time;                
+            }
+        }
+    }
+
+    public void DashCooldown()
+    {
+        dashAvailable = (Time.time - _lastDashTime) > dashCoolDown;
     }
 }
