@@ -77,20 +77,29 @@ public class IAController : MonoBehaviour
             Transform posPlayer = collision.GetComponent<Transform>();
             if (this.transform.position.y > posPlayer.transform.position.y)
             {
-                Debug.Log("Dashear hacia abajo");
+                //Debug.Log("Dashear hacia abajo");
                 dashAbajo = true;
             }
             else
             {
-                Debug.Log("Dashear hacia arriba");
+                //Debug.Log("Dashear hacia arriba");
                 dashArriba = true;
             }
         }
 
+    }
 
-        
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if(this.transform.position.y > -73)
+        {
+            dashAbajo = true;
+        }
 
- 
+        if (this.transform.position.y < -92)
+        {
+            dashArriba = true;
+        }
 
 
     }
