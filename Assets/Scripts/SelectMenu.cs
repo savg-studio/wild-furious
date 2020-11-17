@@ -107,8 +107,10 @@ public class SelectMenu : MonoBehaviour
 
     private void PassInfoToCircuit(bool specialMode)
     {
-        GameObject dataObj = new GameObject(DATA_GAMEOBJECT_NAME);
-        RaceInfo raceInfo = dataObj.AddComponent<RaceInfo>();
+        GameObject dataObj = GameObject.Find(DATA_GAMEOBJECT_NAME);
+        if (dataObj == null) dataObj = new GameObject(DATA_GAMEOBJECT_NAME);
+        RaceInfo raceInfo = dataObj.GetComponent<RaceInfo>();
+        if (raceInfo == null) raceInfo = dataObj.AddComponent<RaceInfo>();
 
         raceInfo.playerName = nameInput == null || string.IsNullOrWhiteSpace(nameInput.text) ? PLAYER_NAME_DEFAULT : nameInput.text;
         raceInfo.circuit = specialMode ? "SPECIAL-MODE" : "NORMAL-MODE";
