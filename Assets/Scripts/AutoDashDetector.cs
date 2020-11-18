@@ -33,7 +33,6 @@ public class AutoDashDetector : MonoBehaviour
                 car.dashArriba = true;
             }
         }
-
     }
 
     private void OnTriggerStay2D(Collider2D collision)

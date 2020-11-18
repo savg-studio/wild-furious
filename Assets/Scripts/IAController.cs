@@ -6,6 +6,7 @@ public class IAController : PlayerController
 {
     public bool dashArriba = false;
     public bool dashAbajo = false;
+    public float verticalAxis = 0;
 
     void Start()
     {
@@ -16,6 +17,9 @@ public class IAController : PlayerController
     {
         Vector3 translation = new Vector3(speed * Time.deltaTime, 0, 0);
         this.transform.Translate(translation);
+
+        Vector3 translation2 = new Vector3(0, verticalAxis * verticalSpeed * Time.deltaTime, 0);
+        this.transform.Translate(translation2);
     }
 
     public override void DashManagement()
