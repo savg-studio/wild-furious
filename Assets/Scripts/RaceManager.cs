@@ -17,6 +17,10 @@ public class RaceManager : MonoBehaviour
     [Tooltip("How many cars are in the circuit? This is used in the special mode to calculate the reverse local position")]
     private int numberOfCars = 3;
 
+    [SerializeField] private List<CharacterSprite> characterSprites = null;
+    [SerializeField] private SpriteRenderer playerSpriteRenderer = null;
+    [SerializeField] private SpriteRenderer[] cpuSpriteRenderers = null;
+
     [SerializeField] private RankingController ranking = null;
     [SerializeField] private GameObject pauseMenu = null;
 
@@ -50,6 +54,23 @@ public class RaceManager : MonoBehaviour
         {
             GameObject dataObj = GameObject.Find(SelectMenu.DATA_GAMEOBJECT_NAME);
             if (dataObj != null) raceInfo = dataObj.GetComponent<RaceInfo>();
+        }
+
+        // Set cars for each player/CPU
+        if (raceInfo != null && characterSprites != null)
+        {
+            int cpusWithNewSprite = 0;
+            foreach (CharacterSprite cs in characterSprites)
+            {
+                if (cs.name == raceInfo.character)
+                {
+                    playerSpriteRenderer.sprite = cs.sprite;
+                }
+                else if (cpusWithNewSprite < cpuSpriteRenderers.Length)
+                {
+                    cpuSpriteRenderers[cpusWithNewSprite++].sprite = cs.sprite;
+                }
+            }
         }
     }
     
@@ -109,5 +130,14 @@ public class RaceManager : MonoBehaviour
     {
         if (pauseMenu == null) pauseMenu = GameObject.Find("PauseMenu");
         if (pauseMenu != null) pauseMenu.SetActive(false);
+    }
+
+    // CHARACTER SPRITE OBJECT (walk-around as dictionaries cannot be placed in the inspector)
+
+    [Serializable]
+    public struct CharacterSprite
+    {
+        public string name;
+        public Sprite sprite;
     }
 }
