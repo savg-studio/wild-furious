@@ -18,8 +18,6 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private Color buttonTextColor = new Color();
     [SerializeField] private Color buttonImageColor = new Color();
 
-    //[SerializeField] private float fadeDuration = 1;
-
     void Start()
     {
         // Start audio

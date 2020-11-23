@@ -4,29 +4,30 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    //input constants
+    // Input constants
     private const string AXIS_H = "Horizontal", AXIS_V = "Vertical";
 
-    //RB
+    // RB
     protected Rigidbody2D carRb;
-    //movement variables
+
+    // Movement variables
     public float speed = 8.0f;
     public float verticalSpeed = 4.0f;
     public float maxSpeed = 35;
     public float acceleration = 1f;
 
-    //dash variables
+    // Dash variables
     public float dashTimeGap = 0.3f;
     public float dashCoolDown = 0.8f;
     public bool dashAvailable = true;    
-    public float _startDashTime=0.3f;
+    public float _startDashTime = 0.3f;
 
     public float dashSpeed = 20;
     protected bool dashingUp = false;
     protected bool dashingDown = false;
-    protected float _dashPressedTime; //time when dash button was pressed last
+    protected float _dashPressedTime = 0; //time when dash button was pressed last
     protected float _lastDashTime = 0; //time when dash was last used
-    protected float _dashTime;
+    protected float _dashTime = 0;
 
     // Additional variables for special power-ups
     public bool inverted = false;
@@ -38,7 +39,6 @@ public class PlayerController : MonoBehaviour
         carRb = this.GetComponent<Rigidbody2D>();
         _dashPressedTime = Time.time;
         _dashTime = _startDashTime;
-
     }
 
     // Update is called once per frame
@@ -85,7 +85,6 @@ public class PlayerController : MonoBehaviour
 
     public virtual void DashManagement()
     {   
-
         if (dashAvailable)
         {
             
@@ -139,7 +138,6 @@ public class PlayerController : MonoBehaviour
             dashingUp = false;
             _dashTime = _startDashTime;
         }
-
     }
 
     public void DashingDown()
@@ -156,7 +154,6 @@ public class PlayerController : MonoBehaviour
             dashingDown = false;
             _dashTime = _startDashTime;
         }
-
     }
 
     public void DashCooldown()

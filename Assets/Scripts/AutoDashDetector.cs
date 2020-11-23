@@ -26,11 +26,11 @@ public class AutoDashDetector : MonoBehaviour
             Transform posPlayer = collision.GetComponent<Transform>();
             if (this.transform.position.y > posPlayer.transform.position.y)
             {
-                car.dashAbajo = true;
+                car.dashDown = true;
             }
             else
             {
-                car.dashArriba = true;
+                car.dashUp = true;
             }
         }
     }
@@ -39,11 +39,11 @@ public class AutoDashDetector : MonoBehaviour
     {
         if (this.transform.position.y > -73)
         {
-            car.dashAbajo = true;
+            car.dashDown = true;
         }
         else if (this.transform.position.y < -92)
         {
-            car.dashArriba = true;
+            car.dashUp = true;
         }
     }
 }

@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class IAController : PlayerController
 {
-    public bool dashArriba = false;
-    public bool dashAbajo = false;
+    public bool dashUp = false;
+    public bool dashDown = false;
     public float verticalAxis = 0;
 
     void Start()
@@ -24,21 +24,20 @@ public class IAController : PlayerController
 
     public override void DashManagement()
     {
-
         if (dashAvailable)
         {
             dashAvailable = false;
-            if (dashArriba)
+            if (dashUp)
             {
-                    dashArriba = false;
+                    dashUp = false;
                     dashingUp = true;
                     _lastDashTime = Time.time;
            
             }
 
-            if (dashAbajo)
+            if (dashDown)
             {
-                    dashAbajo = false;
+                    dashDown = false;
                     dashingDown = true;
                     _lastDashTime = Time.time;                
             }
